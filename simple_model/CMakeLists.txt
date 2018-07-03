@@ -1,5 +1,6 @@
 set(HEADERS
   ${CMAKE_CURRENT_SOURCE_DIR}/event.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/property.hpp
 )
 
 #add_custom_target(simple_model_files SOURCES ${HEADERS}) #Trick to show it up in IDE

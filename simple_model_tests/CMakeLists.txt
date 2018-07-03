@@ -1,6 +1,7 @@
 set(SRC
 	main.cpp
   event.cpp
+  property.cpp
 )
 
 add_executable(simple_model_tests ${SRC})
