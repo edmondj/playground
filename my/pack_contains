@@ -1,0 +1,13 @@
+#include <type_traits>
+
+namespace my
+{
+  template<typename Needle, typename... Haystack>
+  constexpr bool pack_contains = false;
+
+  template<typename Needle, typename... Haystack>
+  constexpr bool pack_contains<Needle, Needle, Haystack...> = true;
+
+  template<typename Needle, typename Hay, typename... Haystack>
+  constexpr bool pack_contains<Needle, Hay, Haystack...> = pack_contains<Needle, Haystack...>;
+}
