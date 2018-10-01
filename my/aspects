@@ -2,34 +2,34 @@
 
 namespace my::aspects
 {
-  template<typename tag, template<typename Base> typename aspect, typename next_link>
+  template<typename Tag, template<typename> typename Aspect, typename Next>
   struct link {};
 
   namespace detail
   {
-    template<typename link, typename... tags>
+    template<typename Link, typename... Tags>
     struct type_from_list
     {
-      using type = link;
+      using type = Link;
     };
 
-    template<typename tag, template<typename Base> typename aspect, typename next_link, typename... tags>
-    struct type_from_list<link<tag, aspect, next_link>, tags...>
+    template<typename Tag, template<typename> typename Aspect, typename Next, typename... Tags>
+    struct type_from_list<link<Tag, Aspect, Next>, Tags...>
     {
-      using base = typename type_from_list<next_link, tags...>::type;
-      using type = std::conditional_t<pack_contains<tag, tags...>, aspect<base>, base>;
+      using base = typename type_from_list<Next, Tags...>::type;
+      using type = std::conditional_t<pack_contains<Tag, Tags...>, Aspect<base>, base>;
     };
   }
 
-  template<typename link, typename... tags>
-  using type_from_list = typename detail::type_from_list<link, tags...>::type;
+  template<typename Link, typename... Tags>
+  using type_from_list = typename detail::type_from_list<Link, Tags...>::type;
 
-  template<template<typename> typename aspect, typename T>
+  template<template<typename> typename Aspect, typename T>
   constexpr bool has_aspect = false;
 
-  template<template<typename> typename aspect, typename T>
-  constexpr bool has_aspect<aspect, aspect<T>> = true;
+  template<template<typename> typename Aspect, typename T>
+  constexpr bool has_aspect<Aspect, Aspect<T>> = true;
 
-  template<template<typename> typename aspect, template<typename> typename aspect2, typename T>
-  constexpr bool has_aspect<aspect, aspect2<T>> = has_aspect<aspect, T>;
+  template<template<typename> typename Aspect, template<typename> typename Aspect2, typename T>
+  constexpr bool has_aspect<Aspect, Aspect2<T>> = has_aspect<Aspect, T>;
 }
