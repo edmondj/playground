@@ -2,12 +2,12 @@
 
 namespace my
 {
-  template<typename Needle, typename... Haystack>
+  template<typename needle, typename... haystack>
   constexpr bool pack_contains = false;
 
-  template<typename Needle, typename... Haystack>
-  constexpr bool pack_contains<Needle, Needle, Haystack...> = true;
+  template<typename needle, typename... haystack>
+  constexpr bool pack_contains<needle, needle, haystack...> = true;
 
-  template<typename Needle, typename Hay, typename... Haystack>
-  constexpr bool pack_contains<Needle, Hay, Haystack...> = pack_contains<Needle, Haystack...>;
+  template<typename needle, typename hay, typename... haystack>
+  constexpr bool pack_contains<needle, hay, haystack...> = pack_contains<needle, haystack...>;
 }
