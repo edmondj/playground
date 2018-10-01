@@ -1,0 +1,35 @@
+#include "pack_contains.hpp"
+
+namespace my::aspects
+{
+  template<typename tag, template<typename Base> typename aspect, typename next_link>
+  struct link {};
+
+  namespace detail
+  {
+    template<typename link, typename... tags>
+    struct type_from_list
+    {
+      using type = link;
+    };
+
+    template<typename tag, template<typename Base> typename aspect, typename next_link, typename... tags>
+    struct type_from_list<link<tag, aspect, next_link>, tags...>
+    {
+      using base = typename type_from_list<next_link, tags...>::type;
+      using type = std::conditional_t<pack_contains<tag, tags...>, aspect<base>, base>;
+    };
+  }
+
+  template<typename link, typename... tags>
+  using type_from_list = typename detail::type_from_list<link, tags...>::type;
+
+  template<template<typename> typename aspect, typename T>
+  constexpr bool has_aspect = false;
+
+  template<template<typename> typename aspect, typename T>
+  constexpr bool has_aspect<aspect, aspect<T>> = true;
+
+  template<template<typename> typename aspect, template<typename> typename aspect2, typename T>
+  constexpr bool has_aspect<aspect, aspect2<T>> = has_aspect<aspect, T>;
+}
